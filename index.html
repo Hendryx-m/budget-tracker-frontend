@@ -93,7 +93,8 @@
 <body>
 
     <h1>Budget Tracker</h1>
-    
+    <p id="login-status"></p>
+
     <div id="login-form">
         <h2>Login</h2>
         <input type="text" id="username" placeholder="Username">
@@ -140,24 +141,29 @@
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            fetch("https://your-actual-backend.onrender.com/login", {
+            fetch("https://budget-tracker-backend.onrender.com/login", {
+
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, password }) 
             })
             .then(response => response.json())
             .then(data => {
-                if (data.access_token) {
+                window.onload = function() {
+                const token = localStorage.getItem("token");
+                if (data.access_token,token) {
                     localStorage.setItem("token", data.access_token);
                     alert("Login successful!");
                     document.getElementById("login-form").style.display = "none";
                     document.getElementById("transaction-form").style.display = "block";
                     document.getElementById("transactions").style.display = "block";
+                    documnet.getElementById("login-status").innerText = "✅ You are logged in!";
                     getTransactions();
                 } else {
                     alert("Invalid credentials, please try again.");
+                    document.getElementById("login-status").innerText = "❌ You are NOT logged in. Please log in.";
                 }
-            })
+            }})
             .catch(error => console.error("Error logging in:", error));
         }
 
